@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Lab1",
+      "request": "launch",
+      "mainClass": "Lab1",
+      "projectName": "实验1_7f6a26ae"
+    },
+    {
+      "type": "java",
+      "name": "df",
+      "request": "launch",
+      "mainClass": "df",
+      "projectName": "实验1_7f6a26ae"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/武靖涛/Desktop/软件工程/实验/实验1",
+      "program": "c:/Users/武靖涛/Desktop/软件工程/实验/实验1/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
