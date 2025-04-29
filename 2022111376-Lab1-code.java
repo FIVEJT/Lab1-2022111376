@@ -87,9 +87,10 @@ public class Lab1 {
     // 1. 展示有向图
     public static void showDirectedGraph(DirectedWeightedGraph G) {
         System.out.println("有向图（邻接表，格式：节点 -> {目标: 权重, ...}）：");
-        for (String u : G.getNodes()) {
-            System.out.println(u + " -> " + G.getAdj(u));
+        for (String u : new TreeSet<>(graph.getNodes())) {
+            System.out.println(u + " -> " + graph.getAdj(u));
         }
+
     }
 
     // 2. 查询桥接词
