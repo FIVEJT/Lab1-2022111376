@@ -3,9 +3,7 @@ import java.util.*;
 
 public class Lab1 {
     // 静态图实例，供各方法使用
-    // 声明一个静态（类级别）变量 graph，类型为自定义的有向加权图。
     private static DirectedWeightedGraph graph = new DirectedWeightedGraph();
-    // 声明 PageRank 计算时的阻尼系数 d，固定为 0.85
     private static final double DAMPING = 0.85;
 
     public static void main(String[] args) {
@@ -87,7 +85,12 @@ public class Lab1 {
     // ======================== 功能函数 ========================
 
     // 1. 展示有向图
-    // 打印图中所有节点及其邻接表
+    /*
+     * new TreeSet<>(graph.getNodes())
+     * 将节点集合转为 TreeSet，即按字典序排序且去重；
+     * graph.getAdj(u)
+     * 获取节点 u 的邻接映射（目标节点→权重），println 会用 {k=v, ...} 形式输出。
+     */
     public static void showDirectedGraph(DirectedWeightedGraph G) {
         System.out.println("有向图（邻接表，格式：节点 -> {目标: 权重, ...}）：");
         for (String u : new TreeSet<>(graph.getNodes())) {
@@ -98,20 +101,15 @@ public class Lab1 {
 
     // 2. 查询桥接词
     public static String queryBridgeWords(String word1, String word2) {
-        // 检查任一输入单词不在图中时，直接返回错误信息
         if (!graph.contains(word1) || !graph.contains(word2)) {
             return String.format("No \"%s\" or \"%s\" in the graph!", word1, word2);
         }
-        // 用 Set 去重收集所有中介词 mid
         Set<String> bridges = new HashSet<>();
-        // 遍历 word1 的所有出边目标 mid
         for (String mid : graph.getNeighbors(word1).keySet()) {
-            // 若 mid 又能到 word2，则 mid 就是桥接词
             if (graph.getNeighbors(mid).containsKey(word2)) {
                 bridges.add(mid);
             }
         }
-        // 最后根据 bridges.isEmpty() 分别返回“无桥接词”或列出所有桥接词
         if (bridges.isEmpty()) {
             return String.format("No bridge words from \"%s\" to \"%s\"!", word1, word2);
         }
@@ -121,13 +119,12 @@ public class Lab1 {
 
     // 3. 根据桥接词生成新文本
     public static String generateNewText(String inputText) {
-        // 统一清洗并分词 正则替换：所有非英文字母字符替为空格
+        // 统一清洗并分词
         String cleaned = inputText.replaceAll("[^A-Za-z]+", " ").toLowerCase().trim();
         String[] tokens = cleaned.split("\\s+");
         List<String> out = new ArrayList<>();
         Random rand = new Random();
-        // 外层 for：逐个将原词 tokens[i] 加入输出列表 out，然后对相邻词对查桥接词
-        // 若存在桥接词集合 bridges，随机选一个插入 out
+
         for (int i = 0; i < tokens.length; i++) {
             out.add(tokens[i]);
             if (i < tokens.length - 1) {
@@ -149,8 +146,6 @@ public class Lab1 {
     }
 
     // 4. 计算最短路径（Dijkstra）
-    // 初始化 dist（所有点到源点的距离，初值为 ∞，源点 dist[word1]=0）和 prev（用来记录路径）
-    // PriorityQueue 按当前 dist 值排序，实现 Dijkstra
     public static String calcShortestPath(String word1, String word2) {
         if (!graph.contains(word1) || !graph.contains(word2)) {
             return "起点或终点不在图中！";
@@ -195,11 +190,6 @@ public class Lab1 {
     }
 
     // 5. 计算 PageRank
-    // 初始化所有节点的 PR 值为 1/N，迭代 100 次
-    // 对每个节点 u，累加所有指向它的前驱 v 的贡献 pr[v]/outDeg(v)；
-    // 使用公式 (1−d)/N + d·sum 更新到 tmp
-    // 每次迭代后 pr.putAll(tmp) 将新值复制回 pr
-    // 返回指定 word 的最终 PR 值
     public static Double calPageRank(String word) {
         if (!graph.contains(word))
             return null;
@@ -232,8 +222,6 @@ public class Lab1 {
     }
 
     // 6. 随机游走
-    // 随机选一个起点 current
-    // 随机选一个起点 current
     public static String randomWalk() {
         Set<String> nodes = graph.getNodes();
         if (nodes.isEmpty())
@@ -264,11 +252,6 @@ public class Lab1 {
     // ======================== 辅助方法 ========================
 
     // 读文件、清洗并分词
-    /*
-     * 用 BufferedReader 按行读文件，拼入 StringBuilder sb。
-     * 捕获 IOException 时打印错误并 System.exit(1) 强制退出。
-     * 用 replaceAll 清洗非字母字符，toLowerCase 小写，split 分词，返回 List<String>
-     */
     private static List<String> readFileAndTokenize(String path) {
         List<String> words = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
